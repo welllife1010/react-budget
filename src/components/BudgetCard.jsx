@@ -1,5 +1,5 @@
 import { Button, Card, ProgressBar, Stack } from "react-bootstrap"
-import { currenyFormatter } from "../utils"
+import { currencyFormatter } from "../utils"
 
 export default function BudgetCard({
   name,
@@ -8,6 +8,7 @@ export default function BudgetCard({
   gray,
   hideButtons,
   onAddExpenseClick,
+  onViewExpensesClick,
 }) {
   const classNames = []
 
@@ -23,10 +24,10 @@ export default function BudgetCard({
         <Card.Title className="d-flex justify-content-between align-items-baseline fw-normal mb-3">
           <div className="me-2">{name}</div>
           <div className="d-flex align-items-baseline">
-            {currenyFormatter.format(amount)}
+            {currencyFormatter.format(amount)}
             {max && (
               <span className="text-muted fs-6 ms-1">
-                / {currenyFormatter.format(max)}
+                / {currencyFormatter.format(max)}
               </span>
             )}
           </div>
@@ -49,7 +50,9 @@ export default function BudgetCard({
             >
               Add Expense
             </Button>
-            <Button variant="outline-secondary">View Expenses</Button>
+            <Button variant="outline-secondary" onClick={onViewExpensesClick}>
+              View Expenses
+            </Button>
           </Stack>
         )}
       </Card.Body>
