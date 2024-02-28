@@ -1,14 +1,17 @@
 import { createContext, useContext, useState } from "react"
+import useLocalStorage from "../hooks/useLocalStorage"
 
 const BudgetsContext = createContext()
+
+export const UNCATEGORIZED_BUDGET_ID = "uncategorized"
 
 export function useBudgets() {
   return useContext(BudgetsContext)
 }
 
 export const BudgetsProvider = ({ children }) => {
-  const [budgets, setBudgets] = useState([]) // {id, name, max}
-  const [expenses, setExpenses] = useState([]) // {id, budgetId, amount, description}
+  const [budgets, setBudgets] = useLocalStorage("budgets", []) // {id, name, max}
+  const [expenses, setExpenses] = useLocalStorage("expenses", []) // {id, budgetId, amount, description}
 
   function getBudgetExpenses(budgetId) {
     return expenses.filter((expense) => expense.budgetId === budgetId)
@@ -18,7 +21,7 @@ export const BudgetsProvider = ({ children }) => {
     setExpenses((prevExpenses) => {
       return [
         ...prevExpenses,
-        { id: crypto.randomUUID, budgetId, amount, description },
+        { id: crypto.randomUUID(), budgetId, amount, description },
       ]
     })
   }
@@ -26,7 +29,7 @@ export const BudgetsProvider = ({ children }) => {
   function addBudget({ name, max }) {
     setBudgets((prevBudgets) => {
       if (prevBudgets.find((budget) => budget.name === name)) return prevBudgets
-      return [...prevBudgets, { id: crypto.randomUUID, name, max }]
+      return [...prevBudgets, { id: crypto.randomUUID(), name, max }]
     })
   }
 
